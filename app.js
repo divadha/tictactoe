@@ -14,10 +14,14 @@ const VALUES_BY_LINES = [
 	['31', '22', '13'], // Diagonal 2
 ];
 let userTurn;
-let virtualDom = {};
-let message = document.getElementById('message');
+let virtualDom;
+let message;
 let counter;
 let gameOver;
+let stageDom;
+let button;
+let turnElement;
+let winnerElement;
 
 
 
@@ -47,8 +51,13 @@ class StageDom {
 	setO(key) {
 		this.stage[key].innerHTML = 'O';
 	}
-	disableOption(key) {
 
+	disableOption(key) {
+		this.stage[key].classList.remove("active");
+	}
+
+	clearOption(key) {
+		this.stage[key].innerHTML = '';
 	}
 
 	addActiveClass(key) {
@@ -63,22 +72,35 @@ class StageDom {
 /************************************************
  *				INIT FUNCTION
  ************************************************/
-const stageDom = new StageDom(onClick);
-init();
 
-function init() {
+
+(function init() {
+	virtualDom = {};
+	message = document.getElementById('message');
+	stageDom = new StageDom(onClick);
+	button = document.getElementById('newGame');
+	button.addEventListener('click', newGame);
+	turnElement = document.getElementById('turn');
+	winnerElement = document.getElementById('winner');
+})();
+
+
+function newGame() {
 	// We generate a random turn if the turn is 1 (true) is user's turn
 	userTurn = parseInt(Math.random() * 2);
 	counter = 0;
 	gameOver = false;
+	turnElement.innerHTML = '';
+	winnerElement.innerHTML = '';
 
 	// We clear the values of virtualDom
 	for (let key of VALUES_STAGE) {
 		stageDom.addActiveClass(key);
+		stageDom.clearOption(key);
 		// Key is the nomber of the option for example 11 12 13 21 etc.
 		virtualDom[key] = {
-			// If active is false the option is available
-			active: false,
+			// If available is false the option is available
+			available: false,
 			// If value is 0 the option is available,
 			// If it's X = 0, X is for computer
 			// If it's O = -1, O is for user
@@ -86,9 +108,11 @@ function init() {
 		};
 	}
 	if (!userTurn) {
+		turnElement.innerHTML = 'X';
 		message.innerHTML = 'Computer start!';
 		generateComputerTurn();
 	} else {
+		turnElement.innerHTML = 'O';
 		message.innerHTML = 'User start!';
 	}
 }
@@ -96,33 +120,40 @@ function init() {
 function setTurn(key) {
 	if (userTurn) {
 		stageDom.setO(key);
-		virtualDom[key].active = true;
+		virtualDom[key].available = true;
 		virtualDom[key].value = -1;
+		turnElement.innerHTML = 'X';
 
 	} else {
+		turnElement.innerHTML = 'O';
 		stageDom.setX(key);
-		virtualDom[key].active = true;
+		virtualDom[key].available = true;
 		virtualDom[key].value = 1;
 	}
 	stageDom.disableOption(key);
+	userTurn = !userTurn;
 	message.innerHTML = "It's  turn of " + (userTurn ? 'User' : 'Computer');
 	counter++;
-	userTurn = !userTurn;
 }
 
 function setWinner(winner) {
+	for (let key of VALUES_STAGE) {
+		if (!virtualDom[key].available) {
+			stageDom.disableOption(key);
+		}
+	}
+	message.innerHTML = '';
 	if (winner) {
-		message.innerHTML = 'The ' + winner + ' Won!';
+		winnerElement.innerHTML = 'The ' + winner + ' Won!';
 	} else {
-		message.innerHTML = 'Game Over there is not a Winner!';
+		winnerElement.innerHTML = 'Game Over there is not a Winner!';
 
 	}
 }
 
 function onClick(key) {
-
 	// if isn't user turn or the stage isn't available we do noting
-	if (!userTurn || virtualDom[key].active || gameOver) {
+	if (!userTurn || virtualDom[key].available || gameOver) {
 		return;
 	}
 	setTurn(key);
@@ -135,30 +166,31 @@ function generateComputerTurn() {
 	if (gameOver) {
 		return;
 	}
-	let key;
-	// If the computer is the firt in play
-	if (counter == 0) {
-		// We have a 50% of possibility of set the 22
-		if (parseInt(Math.random() * 2)) {
-			key = '22';
-		}
-		// Generate a random option
-		else {
-			key = VALUES_STAGE[parseInt(Math.random() * VALUES_STAGE.length)];
-		}
-		// If isn't the first in play generate anohter option
-	} else {
-		let array = analyzeOptions();
-		for (let item of array) {
-			if (item.available) {
-				key = item.available;
-				break;
+	setTimeout(function () {
+		let key;
+		// If the computer is the firt in play
+		if (counter == 0) {
+			// We have a 50% of possibility of set the 22
+			if (parseInt(Math.random() * 2)) {
+				key = '22';
+			}
+			// Generate a random option
+			else {
+				key = VALUES_STAGE[parseInt(Math.random() * VALUES_STAGE.length)];
+			}
+			// If isn't the first in play generate anohter option
+		} else {
+			let array = analyzeOptions();
+			for (let item of array) {
+				if (item.available) {
+					key = item.available;
+					break;
+				}
 			}
 		}
-	}
-	setTurn(key);
-	validateWin();
-
+		setTurn(key);
+		validateWin();
+	}, 500);
 }
 
 // This function alalyze the best option for the computer 
@@ -184,9 +216,7 @@ function analyzeOptions() {
 
 		return Math.abs(a.value) > Math.abs(b.value) ? -1 : // If the absolute value of A is more than B return -1
 			Math.abs(a.value) < Math.abs(b.value) ? 1 : // If the absolute value of A is less than B return 1
-			a.value > b.value ? -1 : // If the absolute value of A is equals B take in count if is positive 
-			a.value == b.value ? // If both values are equial we take in count if is available
-			(a.available ? -1 : 1) : 1
+			a.value > b.value ? -1 : 1 // If the absolute value of A is equals B take in count if is positive 
 	});
 	return array;
 }
