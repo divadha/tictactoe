@@ -1,0 +1,40 @@
+html {
+	background-color: #fff;
+	color: #555;
+	font-family: 'Lato', 'Arial', sans-serif;
+	font-weight: 300;
+	font-size: 20px;
+	text-rendering: optimizeLegibility;
+}
+
+.row {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+}
+
+
+.border-bottom {
+	border-bottom: 3px solid black;
+}
+
+.border-left {
+	border-left: 3px solid black;
+}
+
+.option {
+	width: 150px;
+	height: 150px;
+	text-align: center;
+	font-size: 600%;
+	font-weight: bold;
+}
+
+.active {
+	cursor: pointer;
+}
+
+.active:hover {
+	background-color: rgba(68, 204, 7, 0.2);
+}
