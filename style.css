@@ -14,6 +14,11 @@ html {
 	flex-direction: row;
 }
 
+.colum {
+	margin: 10px;
+	padding-right: 40px;
+}
+
 
 .border-bottom {
 	border-bottom: 3px solid black;
@@ -23,12 +28,21 @@ html {
 	border-left: 3px solid black;
 }
 
+.center {
+	width: 50%;
+	margin: 0 auto;
+}
+
 .option {
 	width: 150px;
 	height: 150px;
 	text-align: center;
 	font-size: 600%;
 	font-weight: bold;
+	color: #009300;
+	text-shadow: 2px 0 0 #1f1f1f,
+	-2px 0 0 #1f1f1f, 0 2px 0 #1f1f1f, 0 -2px 0 #1f1f1f, 1px 1px #1f1f1f,
+	-1px -1px 0 #1f1f1f, 1px -1px 0 #1f1f1f, -1px 1px 0 #1f1f1f;
 }
 
 .active {
@@ -37,4 +51,32 @@ html {
 
 .active:hover {
 	background-color: rgba(68, 204, 7, 0.2);
+}
+
+.message {
+	font-weight: bold;
+	color: #262626;
+}
+
+.winner {
+	margin-top: 20px;
+	font-size: 140%;
+	font-weight: bold;
+	color: #9b0000;
+	text-align: center;
+}
+
+input {
+	color: #fff;
+	background-color: black;
+	height: 30px;
+	width: 200px;
+	border: 0;
+	font-size: 110%;
+	transition: background-color 0.3s;
+}
+
+input:hover,
+input:active {
+	background-color: #e67e22;
 }
