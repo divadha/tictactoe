@@ -39,7 +39,6 @@ html {
 	text-align: center;
 	font-size: 600%;
 	font-weight: bold;
-	color: red;
 	text-shadow: 2px 0 0 #1f1f1f,
 	-2px 0 0 #1f1f1f, 0 2px 0 #1f1f1f, 0 -2px 0 #1f1f1f, 1px 1px #1f1f1f,
 	-1px -1px 0 #1f1f1f, 1px -1px 0 #1f1f1f, -1px 1px 0 #1f1f1f;
@@ -83,7 +82,7 @@ input:active {
 }
 
 .rotate {
-	color: #009300;
+	color: red;
 	-webkit-animation: rotation 3s infinite linear;
 }
 
@@ -96,6 +95,10 @@ input:active {
 	}
 }
 
-#turn {
-	color: #0093e2;
+.optionX {
+	color: #009300;
+}
+
+.optionO {
+	color: #0041f0;
 }
