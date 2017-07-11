@@ -223,7 +223,8 @@ function analyzeOptions() {
 				line[1] : virtualDom[line[0]].value == 0 ? // If the third option is available
 				line[0] : false // If any option is available the value is false
 		};
-		if (object.available == '33' && object.key1 == '11' && virtualDom['23'].value == -1 && virtualDom['11'].value == 0) {
+		if (object.available == '33' && object.key1 == '11' && (virtualDom['23'].value == -1 || virtualDom['12'].value == -1) &&
+			virtualDom['11'].value == 0) {
 			object.available = '11';
 		}
 		array.push(object)
