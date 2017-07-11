@@ -213,23 +213,27 @@ function generateComputerTurn() {
 function analyzeOptions() {
 	let array = [];
 	for (let line of VALUES_BY_LINES) {
-		array.push({
+		let object = {
 			value: virtualDom[line[0]].value + virtualDom[line[1]].value + virtualDom[line[2]].value,
 			key1: line[0],
 			key2: line[1],
 			key3: line[2],
-			available: virtualDom[line[0]].value == 0 ? // If the first option is available
-				line[0] : virtualDom[line[1]].value == 0 ? // If the second option is available
-				line[1] : virtualDom[line[2]].value == 0 ? // If the third option is available
-				line[2] : false // If any option is available the value is false
-		});
+			available: virtualDom[line[2]].value == 0 ? // If the first option is available
+				line[2] : virtualDom[line[1]].value == 0 ? // If the second option is available
+				line[1] : virtualDom[line[0]].value == 0 ? // If the third option is available
+				line[0] : false // If any option is available the value is false
+		};
+		if (object.available == '33' && object.key1 == '11' && virtualDom['23'].value == -1 && virtualDom['11'].value == 0) {
+			object.available = '11';
+		}
+		array.push(object)
 	}
 
 	// sort the array by value
 	array.sort(function (a, b) {
 		return Math.abs(a.value) > Math.abs(b.value) ? -1 : // If the absolute value of A is more than B return -1
 			Math.abs(a.value) < Math.abs(b.value) ? 1 : // If the absolute value of A is less than B return 1
-			a.value > b.value ? -1 : 1 // If the absolute value of A is equals B take in count if is positive 
+			a.value > b.value ? -1 : 1
 	});
 	return array;
 }
