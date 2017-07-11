@@ -45,10 +45,12 @@ class StageDom {
 	}
 
 	setX(key) {
+		this.stage[key].classList.add("optionO");
 		this.stage[key].innerHTML = 'X';
 	}
 
 	setO(key) {
+		this.stage[key].classList.add("optionX");
 		this.stage[key].innerHTML = 'O';
 	}
 
@@ -59,6 +61,8 @@ class StageDom {
 	clearOption(key) {
 		this.stage[key].innerHTML = '';
 		this.stage[key].classList.remove("rotate");
+		this.stage[key].classList.remove("optionO");
+		this.stage[key].classList.remove("optionX");
 	}
 
 	addActiveClass(key) {
@@ -66,6 +70,12 @@ class StageDom {
 	}
 
 	setWinner(key1, key2, key3) {
+		this.stage[key1].classList.remove("optionO");
+		this.stage[key1].classList.remove("optionX");
+		this.stage[key2].classList.remove("optionO");
+		this.stage[key2].classList.remove("optionX");
+		this.stage[key3].classList.remove("optionO");
+		this.stage[key3].classList.remove("optionX");
 		this.stage[key1].classList.add("rotate");
 		this.stage[key2].classList.add("rotate");
 		this.stage[key3].classList.add("rotate");
@@ -111,27 +121,36 @@ function newGame() {
 			value: 0
 		};
 	}
+	
+	turnElement.classList.remove("optionO");
+	turnElement.classList.remove("optionY");
 	if (!userTurn) {
 		turnElement.innerHTML = 'X';
+		turnElement.classList.add("optionO");
 		message.innerHTML = 'Computer start!';
 		generateComputerTurn();
 	} else {
 		turnElement.innerHTML = 'O';
+		turnElement.classList.add("optionX");
 		message.innerHTML = 'User start!';
 	}
 }
 
 function setTurn(key) {
+	turnElement.classList.remove("optionO");
+	turnElement.classList.remove("optionY");
 	if (userTurn) {
 		stageDom.setO(key);
 		virtualDom[key].available = true;
 		virtualDom[key].value = -1;
 		turnElement.innerHTML = 'X';
+		turnElement.classList.add("optionO");
 	} else {
-		turnElement.innerHTML = 'O';
 		stageDom.setX(key);
 		virtualDom[key].available = true;
 		virtualDom[key].value = 1;
+		turnElement.innerHTML = 'O';
+		turnElement.classList.add("optionX");
 	}
 	stageDom.disableOption(key);
 	userTurn = !userTurn;
