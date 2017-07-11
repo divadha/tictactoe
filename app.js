@@ -113,15 +113,15 @@ function newGame() {
 		stageDom.clearOption(key);
 		// Key is the nomber of the option for example 11 12 13 21 etc.
 		virtualDom[key] = {
-			// If available is false the option is available
-			available: false,
+			// If active is false the option is available
+			active: false,
 			// If value is 0 the option is available,
 			// If it's X = 0, X is for computer
 			// If it's O = -1, O is for user
 			value: 0
 		};
 	}
-	
+
 	turnElement.classList.remove("optionO");
 	turnElement.classList.remove("optionY");
 	if (!userTurn) {
@@ -141,13 +141,13 @@ function setTurn(key) {
 	turnElement.classList.remove("optionY");
 	if (userTurn) {
 		stageDom.setO(key);
-		virtualDom[key].available = true;
+		virtualDom[key].active = true;
 		virtualDom[key].value = -1;
 		turnElement.innerHTML = 'X';
 		turnElement.classList.add("optionO");
 	} else {
 		stageDom.setX(key);
-		virtualDom[key].available = true;
+		virtualDom[key].active = true;
 		virtualDom[key].value = 1;
 		turnElement.innerHTML = 'O';
 		turnElement.classList.add("optionX");
@@ -160,7 +160,7 @@ function setTurn(key) {
 
 function setWinner(winner, key1, key2, key3) {
 	for (let key of VALUES_STAGE) {
-		if (!virtualDom[key].available) {
+		if (!virtualDom[key].active) {
 			stageDom.disableOption(key);
 		}
 	}
@@ -174,8 +174,8 @@ function setWinner(winner, key1, key2, key3) {
 }
 
 function onClick(key) {
-	// if isn't user turn or the stage isn't available we do noting
-	if (!userTurn || virtualDom[key].available || gameOver) {
+	// if isn't user turn or the stage isn't active we do noting
+	if (!userTurn || virtualDom[key].active || gameOver) {
 		return;
 	}
 	setTurn(key);
@@ -191,16 +191,8 @@ function generateComputerTurn() {
 	setTimeout(function () {
 		let key;
 		// If the computer is the firt in play
-		if (counter == 0) {
-			// We have a 50% of possibility of set the 22
-			if (parseInt(Math.random() * 2)) {
-				key = '22';
-			}
-			// Generate a random option
-			else {
-				key = VALUES_STAGE[parseInt(Math.random() * VALUES_STAGE.length)];
-			}
-			// If isn't the first in play generate anohter option
+		if (counter <= 1 && !virtualDom['22'].active) {
+			key = '22';
 		} else {
 			let array = analyzeOptions();
 			for (let item of array) {
@@ -215,7 +207,7 @@ function generateComputerTurn() {
 	}, 500);
 }
 
-// This function alalyze the best option for the computer 
+// This function analyze the best option for the computer 
 // Or if someone is win
 // Return a list of object ({value : 2, key1 : '11', key2 : '12', key3 : '13', available : false})
 function analyzeOptions() {
