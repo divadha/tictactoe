@@ -22,6 +22,7 @@ let stageDom;
 let button;
 let turnElement;
 let winnerElement;
+let turnFirstTime;
 
 
 
@@ -96,12 +97,14 @@ class StageDom {
 	button.addEventListener('click', newGame);
 	turnElement = document.getElementById('turn');
 	winnerElement = document.getElementById('winner');
+	turnFirstTime = parseInt(Math.random() * 2);
 })();
 
 
 function newGame() {
 	// We generate a random turn if the turn is 1 (true) is user's turn
-	userTurn = parseInt(Math.random() * 2);
+	userTurn = turnFirstTime;
+	turnFirstTime = !turnFirstTime;
 	counter = 0;
 	gameOver = false;
 	turnElement.innerHTML = '';
