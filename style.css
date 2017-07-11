@@ -39,7 +39,7 @@ html {
 	text-align: center;
 	font-size: 600%;
 	font-weight: bold;
-	color: #009300;
+	color: red;
 	text-shadow: 2px 0 0 #1f1f1f,
 	-2px 0 0 #1f1f1f, 0 2px 0 #1f1f1f, 0 -2px 0 #1f1f1f, 1px 1px #1f1f1f,
 	-1px -1px 0 #1f1f1f, 1px -1px 0 #1f1f1f, -1px 1px 0 #1f1f1f;
@@ -79,4 +79,22 @@ input {
 input:hover,
 input:active {
 	background-color: #e67e22;
+}
+
+.rotate {
+	color: #009300;
+	-webkit-animation: rotation 3s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+	from {
+		-webkit-transform: rotateY(0deg);
+	}
+	to {
+		-webkit-transform: rotateY(360deg);
+	}
+}
+
+#turn {
+	color: #0093e2;
 }
