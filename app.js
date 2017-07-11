@@ -58,15 +58,19 @@ class StageDom {
 
 	clearOption(key) {
 		this.stage[key].innerHTML = '';
+		this.stage[key].classList.remove("rotate");
 	}
 
 	addActiveClass(key) {
 		this.stage[key].classList.add("active");
 	}
+
+	setWinner(key1, key2, key3) {
+		this.stage[key1].classList.add("rotate");
+		this.stage[key2].classList.add("rotate");
+		this.stage[key3].classList.add("rotate");
+	}
 }
-
-
-
 
 
 /************************************************
@@ -123,7 +127,6 @@ function setTurn(key) {
 		virtualDom[key].available = true;
 		virtualDom[key].value = -1;
 		turnElement.innerHTML = 'X';
-
 	} else {
 		turnElement.innerHTML = 'O';
 		stageDom.setX(key);
@@ -136,7 +139,7 @@ function setTurn(key) {
 	counter++;
 }
 
-function setWinner(winner) {
+function setWinner(winner, key1, key2, key3) {
 	for (let key of VALUES_STAGE) {
 		if (!virtualDom[key].available) {
 			stageDom.disableOption(key);
@@ -144,10 +147,10 @@ function setWinner(winner) {
 	}
 	message.innerHTML = '';
 	if (winner) {
+		stageDom.setWinner(key1, key2, key3);
 		winnerElement.innerHTML = 'The ' + winner + ' Won!';
 	} else {
 		winnerElement.innerHTML = 'Game Over there is not a Winner!';
-
 	}
 }
 
@@ -213,7 +216,6 @@ function analyzeOptions() {
 
 	// sort the array by value
 	array.sort(function (a, b) {
-
 		return Math.abs(a.value) > Math.abs(b.value) ? -1 : // If the absolute value of A is more than B return -1
 			Math.abs(a.value) < Math.abs(b.value) ? 1 : // If the absolute value of A is less than B return 1
 			a.value > b.value ? -1 : 1 // If the absolute value of A is equals B take in count if is positive 
@@ -223,16 +225,15 @@ function analyzeOptions() {
 
 // If the first element of the array is 3 or -3 there ir a winner 
 function validateWin() {
-	let value = analyzeOptions()[0].value;
-	if (value == 3) {
-		setWinner('Computer');
+	let item = analyzeOptions()[0];
+	if (item.value == 3) {
+		setWinner('Computer', item.key1, item.key2, item.key3);
 		gameOver = true;
-	} else if (value == -3) {
-		setWinner('User');
+	} else if (item.value == -3) {
+		setWinner('User', item.key1, item.key2, item.key3);
 		gameOver = true;
 	} else if (counter >= 9) {
 		setWinner(null);
 		gameOver = true;
-
 	}
 }
